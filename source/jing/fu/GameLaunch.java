@@ -67,12 +67,13 @@ public class GameLaunch extends Frame  {
 
 	public void launchFrame()  {
 		int num=0;
+		// generate 61 Leds and assign its game cooedinates(i,j) and screen coordinates(temp) 
 		for (int i=1;i<=rows ;i++ ) {
 			for (int j=1; j<=columns ; j++) {
 				if (Math.abs(i-j)>=((columns+1)/2)) {
 					continue;//do not creat led object with coordinates difference larger or equal than 5
 				}
-				int[] temp= {(86+(j-1)*31),(132-(j-1)*18+(i-1)*36)};
+				int[] temp= {(86+(j-1)*31),(132-(j-1)*18+(i-1)*36)};// screen coordinates
 				leds.add(new Led(i,j));
 				MapCoordinates.put(leds.get(num),temp);
 				num++;
@@ -101,9 +102,10 @@ public class GameLaunch extends Frame  {
 	private class PaintThread implements Runnable {//inner class
 		public void run() {
 			while (true){
-			repaint();
+			repaint();// repaint the screen at each cycle
 			try {
-				Thread.sleep(Integer.parseInt(PropertyManager.getProperty("freshSpeed")));//time units milliseconds, period of refreshing the screen
+				// time in milliseconds, period of refreshing the screen
+				Thread.sleep(Integer.parseInt(PropertyManager.getProperty("freshSpeed")));
 			}
 			catch (Exception err) {
 				System.err.println(err.getMessage());
@@ -113,14 +115,18 @@ public class GameLaunch extends Frame  {
 	}
 
 	private class KeyMonitor extends KeyAdapter {
+
 		public void keyPressed(KeyEvent e) {
 			 mySnake.keyPressed(e);
 		}
+
 		public void keyReleased(KeyEvent e) {
 			 mySnake.keyReleased(e);
-			 int key = e.getKeyCode();
-			 switch (key) {
-			 	case KeyEvent.VK_1 : mySnake= new Snake(GameLaunch.this);break;
+			 if (!mySnake.getLive()) {// if the snake dies, press key '1' to resurrect
+			 	int key = e.getKeyCode();
+				switch (key) {
+			 		case KeyEvent.VK_1 : mySnake= new Snake(GameLaunch.this);break;
+				 }
 			 }
 		}
 	}

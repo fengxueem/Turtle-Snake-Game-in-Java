@@ -43,17 +43,21 @@ public class Fruit {
 	public boolean hitSnake(Snake s) {
 
 		for (int i = 0; i < 3; i++){
-			if(this.x == s.x.get(i) && this.y == s.y.get(i)) {	
+			// if position of fruit is equal to the any part of snake's positon, then the fruit hits snake
+			if(this.x == s.x.get(i) && this.y == s.y.get(i)) {	 
 				return true;
 			}
-		} return false;
+		} 
+		return false;
 	}
 	
 	public void initializeFruit() {
+		// randmonly generate a position for a fruit when it's be created.
+		// and make sure the position does not collide with existing snake and inside the screen
 		do {
-			this.x = r.nextInt(8)+1;
-			this.y = r.nextInt(8)+1;
-		}while(Math.abs(this.x-this.y)>=5 || hitSnake(gl.mySnake));
+			this.x = r.nextInt(8)+1;/*inside the screen: x belongs to (1,9)*/
+			this.y = r.nextInt(8)+1;/*inside the screen: y belongs to (1,9)*/
+		}while(/*inside the screen: distance btw x and y is smaller than 5*/Math.abs(this.x-this.y) >= 5 || /*does not collide with existing snake*/hitSnake(gl.mySnake));
 	}
 
 	public int getX() {
